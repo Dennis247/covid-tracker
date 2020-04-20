@@ -25,10 +25,12 @@ class DeviceProvider with ChangeNotifier {
         Map<dynamic, dynamic> deviceList = dataSnapshot.value;
         deviceList.forEach((key, value) {
           final device = Device(
-              deviceId: value['deviceId'],
-              userId: value['userId'],
-              latitude: value['latitude'],
-              longitude: value['longitude']);
+            deviceId: value['deviceId'],
+            userId: value['userId'],
+            latitude: value['latitude'],
+            longitude: value['longitude'],
+            locationTime: DateTime.parse(value['locationTime'].toString()),
+          );
           _alldevices.add(device);
         });
         _processDeviceDistance();
@@ -64,26 +66,31 @@ class DeviceProvider with ChangeNotifier {
     if (_alldevices.length > 0) {
       _alldevices.forEach((contactDevice) {
         if (currentUserDevice.deviceId != contactDevice.deviceId) {
-          //calculate distance between device
-          final contactDistance = _caculateDeviceDistanceInMeters(
-              currentUserDevice.latitude,
-              currentUserDevice.longitude,
-              contactDevice.latitude,
-              contactDevice.longitude);
-          if (contactDistance <= 6) {
-            //create contact if device contact is less than or equal to 6 meters
-            Contact contact = new Contact(
-                conatctDate: DateTime.now(),
-                deviceId: contactDevice.deviceId,
-                contactId: contactDevice.userId,
-                latitude: contactDevice.latitude,
-                longitude: contactDevice.longitude,
-                distance: contactDistance,
-                referenceId: currentUserDevice.userId,
-                displayName: loggedInUser.displayName,
-                email: loggedInUser.email,
-                imageUrl: loggedInUser.photoUrl);
-            _updateContact(contact);
+          DateTime timeStamp = DateTime.now();
+          //check if device has been in same location for the last 1 hour
+          if (timeStamp.difference(contactDevice.locationTime) <=
+              Duration(hours: 1)) {
+            //calculate distance between device
+            final contactDistance = _caculateDeviceDistanceInMeters(
+                currentUserDevice.latitude,
+                currentUserDevice.longitude,
+                contactDevice.latitude,
+                contactDevice.longitude);
+            if (contactDistance <= 6) {
+              //create contact if device contact is less than or equal to 6 meters
+              Contact contact = new Contact(
+                  conatctDate: DateTime.now(),
+                  deviceId: contactDevice.deviceId,
+                  contactId: contactDevice.userId,
+                  latitude: contactDevice.latitude,
+                  longitude: contactDevice.longitude,
+                  distance: contactDistance,
+                  referenceId: currentUserDevice.userId,
+                  displayName: loggedInUser.displayName,
+                  email: loggedInUser.email,
+                  imageUrl: loggedInUser.photoUrl);
+              _updateContact(contact);
+            }
           }
         }
       });
@@ -104,6 +111,7 @@ class DeviceProvider with ChangeNotifier {
       'longitude': device.longitude,
       'deviceId': device.deviceId,
       'userId': device.userId,
+      'locationTime': device.locationTime
     });
   }
 
@@ -127,6 +135,7 @@ class DeviceProvider with ChangeNotifier {
         deviceId: loggedInUser.deviceId,
         userId: loggedInUser.id,
         latitude: latitude,
-        longitude: longitude);
+        longitude: longitude,
+        locationTime: DateTime.now());
   }
 }

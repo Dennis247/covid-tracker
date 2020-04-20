@@ -39,4 +39,33 @@ class ContactProvider with ChangeNotifier {
       print(e.toString());
     }
   }
+
+  clearIsolatedContacts() {
+    //remove individuals that you had contact with in thw last 14 days
+    try {
+      contactReference
+          .orderByChild("referenceId")
+          .equalTo(loggedInUser.id)
+          .once()
+          .then((dataSnapshot) {
+        Map<dynamic, dynamic> contactList = dataSnapshot.value;
+        contactList.forEach((key, value) {
+          //check if existing contact is more than 14 days
+          if (DateTime.parse(value['conatctDate'].toString())
+                  .difference(DateTime.now()) >=
+              Duration(days: 14)) {
+            contactReference
+                .reference()
+                .child(key.toString())
+                .remove()
+                .then((_) {
+              print("contact removed sucessfully");
+            });
+          }
+        });
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 }

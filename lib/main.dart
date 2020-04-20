@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
         child: Consumer<AuthProvider>(
           builder: (context, authData, _) {
             return MaterialApp(
+              debugShowCheckedModeBanner: false,
               title: 'Corona Tracker',
               theme: ThemeData(primaryColor: Constants.primaryColor),
               home: authData.isLoggedIn

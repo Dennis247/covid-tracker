@@ -2,12 +2,14 @@ import 'package:covid_tracker/model/contactModel.dart';
 import 'package:covid_tracker/provider/authProvider.dart';
 import 'package:covid_tracker/provider/contactProvider.dart';
 import 'package:covid_tracker/provider/deviceProvider.dart';
+import 'package:covid_tracker/ui/pages/authPage.dart';
 import 'package:covid_tracker/ui/widgets/contactWidget.dart';
 import 'package:covid_tracker/utils/constants.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:covid_tracker/utils/styles.dart';
 
 class HomePage extends StatefulWidget {
   static final routeName = "home-page";
@@ -23,27 +25,47 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Recent Contacts"),
+      appBar: AppBar(
+        title: Text(
+          "Recent Contacts",
+          style: AppStyle.headerTextStyle,
         ),
-        body: StreamBuilder(
-            stream: contactReference.onValue,
-            builder: (context, AsyncSnapshot<Event> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
+        centerTitle: true,
+      ),
+      body: StreamBuilder(
+          stream: contactReference
+              .orderByChild('referenceId')
+              .equalTo(loggedInUser.id)
+              .onValue,
+          builder: (context, AsyncSnapshot<Event> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              if (snapshot.hasError) {
                 return Center(
-                  child: CircularProgressIndicator(),
+                  child: Text("An Error Occured Getting COntacts"),
                 );
               } else {
-                if (snapshot.hasError) {
+                List contactList = [];
+                DataSnapshot dataSnapshot = snapshot.data.snapshot;
+                Map<dynamic, dynamic> values = dataSnapshot.value;
+                if (values == null) {
                   return Center(
-                    child: Text("An Error Occured Getting COntacts"),
+                    child: Text(
+                      "You Currently have no contact",
+                      style: AppStyle.mediumTextSTyle,
+                    ),
                   );
                 } else {
-                  List contactList = [];
-                  DataSnapshot dataSnapshot = snapshot.data.snapshot;
-                  Map<dynamic, dynamic> values = dataSnapshot.value;
                   values.forEach((key, value) {
                     contactList.add(value);
                   });
@@ -67,6 +89,16 @@ class _HomePageState extends State<HomePage> {
                       });
                 }
               }
-            }));
+            }
+          }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Provider.of<AuthProvider>(context, listen: false).handleSignOut();
+          Navigator.of(context).pushReplacementNamed(AuthPage.routeName);
+        },
+        child: Icon(FontAwesomeIcons.lock),
+        backgroundColor: Constants.primaryColor,
+      ),
+    );
   }
 }

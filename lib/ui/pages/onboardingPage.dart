@@ -1,8 +1,8 @@
 import 'package:covid_tracker/utils/constants.dart';
+import 'package:covid_tracker/utils/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
-
 import 'authPage.dart';
 
 class OnBoardingPage extends StatefulWidget {
@@ -25,13 +25,16 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                   image: DecorationImage(
                       image: AssetImage(imagePath), fit: BoxFit.contain)),
             ),
-            Text(introText),
+            Text(
+              introText,
+              style: AppStyle.mediumTextSTyle,
+            ),
             SizedBox(
               height: 20,
             ),
             Text(
               pageNo.toString(),
-              style: TextStyle(fontSize: 30),
+              style: AppStyle.largeTextSTyle,
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.1,

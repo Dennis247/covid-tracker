@@ -1,3 +1,4 @@
+import 'package:background_location/background_location.dart';
 import 'package:covid_tracker/model/userModel.dart';
 import 'package:covid_tracker/utils/constants.dart';
 import 'package:device_id/device_id.dart';
@@ -6,19 +7,16 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:covid_tracker/provider/userProvider.dart';
 import 'dart:convert';
 
 String deviceId;
 GoogleSignInAccount googleUser;
 User loggedInUser;
 
-
 class AuthProvider with ChangeNotifier {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final FirebaseAuth auth = FirebaseAuth.instance;
   final userRef = FirebaseDatabase.instance.reference().child('users');
-
 
   bool isLoggedIn = false;
   bool hasOnboarded = false;
@@ -64,7 +62,9 @@ class AuthProvider with ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       prefs.remove(Constants.userData);
       isLoggedIn = false;
-      notifyListeners();
+      //  notifyListeners();
+
+      BackgroundLocation.stopLocationService();
     } catch (e) {
       print(e.toString());
     }
@@ -104,26 +104,26 @@ class AuthProvider with ChangeNotifier {
   Future<void> _createUser() async {
     try {
       googleUser = googleSignIn.currentUser;
-      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-      final AuthCredential credential = GoogleAuthProvider.getCredential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
+      // GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      // final AuthCredential credential = GoogleAuthProvider.getCredential(
+      //   accessToken: googleAuth.accessToken,
+      //   idToken: googleAuth.idToken,
+      // );
       // FirebaseUser firebaseUser =
       //     (await auth.signInWithCredential(credential)).user;
       // if (firebaseUser != null) {
       deviceId = await DeviceId.getID;
+      loggedInUser = new User(
+          id: googleUser.id,
+          email: googleUser.email,
+          photoUrl: googleUser.photoUrl,
+          displayName: googleUser.displayName,
+          deviceId: deviceId);
       await userRef
           .child(googleUser.id)
           .once()
           .then((DataSnapshot dataSnapshot) {
         if (dataSnapshot.value == null) {
-          loggedInUser = new User(
-              id: googleUser.id,
-              email: googleUser.email,
-              photoUrl: googleUser.photoUrl,
-              displayName: googleUser.displayName,
-              deviceId: deviceId);
           userRef.child(googleUser.id).update({
             "id": googleUser.id,
             "email": googleUser.email,

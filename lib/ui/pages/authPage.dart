@@ -1,12 +1,10 @@
-import 'package:covid_tracker/model/userModel.dart';
 import 'package:covid_tracker/provider/authProvider.dart';
 import 'package:covid_tracker/utils/constants.dart';
-import 'package:device_id/device_id.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:covid_tracker/utils/styles.dart';
 import 'homePage.dart';
 
 class AuthPage extends StatefulWidget {
@@ -73,7 +71,7 @@ class _AuthPageState extends State<AuthPage> {
                           )
                         : Text(
                             "Sign In With Google",
-                            style: TextStyle(color: Colors.white),
+                            style: AppStyle.mediumTextSTyleWhite,
                           )
                   ],
                 ),
