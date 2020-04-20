@@ -21,6 +21,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     Provider.of<DeviceProvider>(context, listen: false).getDeviceUpdate();
+    Provider.of<ContactProvider>(context, listen: false)
+        .clearIsolatedContacts();
     super.initState();
   }
 
