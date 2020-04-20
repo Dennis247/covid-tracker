@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 
 class Device {
-  final String id;
   final String deviceId;
   final String userId;
   final double latitude;
   final double longitude;
 
   Device({
-    @required this.id,
     @required this.deviceId,
     @required this.userId,
     @required this.latitude,
@@ -22,8 +20,7 @@ class Device {
   }
 
   Device.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        deviceId = json['deviceId'],
+      : deviceId = json['deviceId'],
         latitude = json['latitude'],
         longitude = json['longitude'],
         userId = json['userId'];

@@ -1,3 +1,4 @@
+import 'package:covid_tracker/provider/contactProvider.dart';
 import 'package:provider/provider.dart';
 
 import 'provider/authProvider.dart';
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
         providers: [
           ChangeNotifierProvider.value(value: AuthProvider()),
           ChangeNotifierProvider.value(value: DeviceProvider()),
+          ChangeNotifierProvider.value(value: ContactProvider()),
         ],
         child: Consumer<AuthProvider>(
           builder: (context, authData, _) {

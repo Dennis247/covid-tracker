@@ -6,23 +6,27 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:covid_tracker/provider/userProvider.dart';
 import 'dart:convert';
 
 String deviceId;
+GoogleSignInAccount googleUser;
+User loggedInUser;
+
 
 class AuthProvider with ChangeNotifier {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final FirebaseAuth auth = FirebaseAuth.instance;
-  final contactRef = FirebaseDatabase.instance.reference().child('contacts');
-  GoogleSignInAccount googleUser;
-  User loggedInContact;
+  final userRef = FirebaseDatabase.instance.reference().child('users');
+
+
   bool isLoggedIn = false;
   bool hasOnboarded = false;
 
   Future<void> handleSignIn() async {
     try {
       await googleSignIn.signIn().then((_) async {
-        await _createContact();
+        await _createUser();
         await _storePreferenceData();
         isLoggedIn = true;
         notifyListeners();
@@ -56,7 +60,7 @@ class AuthProvider with ChangeNotifier {
   Future<void> handleSignOut() async {
     try {
       await googleSignIn.signOut();
-      loggedInContact = null;
+      loggedInUser = null;
       final prefs = await SharedPreferences.getInstance();
       prefs.remove(Constants.userData);
       isLoggedIn = false;
@@ -85,7 +89,7 @@ class AuthProvider with ChangeNotifier {
     }
     final sharedData = sharedPref.getString(Constants.userData);
     final extractedUserData = json.decode(sharedData) as Map<String, Object>;
-    loggedInContact = new User(
+    loggedInUser = new User(
         id: extractedUserData['id'],
         email: extractedUserData['email'],
         photoUrl: extractedUserData['photoUrl'],
@@ -97,7 +101,7 @@ class AuthProvider with ChangeNotifier {
     return true;
   }
 
-  Future<void> _createContact() async {
+  Future<void> _createUser() async {
     try {
       googleUser = googleSignIn.currentUser;
       GoogleSignInAuthentication googleAuth = await googleUser.authentication;
@@ -109,12 +113,18 @@ class AuthProvider with ChangeNotifier {
       //     (await auth.signInWithCredential(credential)).user;
       // if (firebaseUser != null) {
       deviceId = await DeviceId.getID;
-      await contactRef
+      await userRef
           .child(googleUser.id)
           .once()
           .then((DataSnapshot dataSnapshot) {
         if (dataSnapshot.value == null) {
-          contactRef.child(googleUser.id).update({
+          loggedInUser = new User(
+              id: googleUser.id,
+              email: googleUser.email,
+              photoUrl: googleUser.photoUrl,
+              displayName: googleUser.displayName,
+              deviceId: deviceId);
+          userRef.child(googleUser.id).update({
             "id": googleUser.id,
             "email": googleUser.email,
             "photoUrl": googleUser.photoUrl,
