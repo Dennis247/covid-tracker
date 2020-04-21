@@ -1,5 +1,6 @@
 # covid_tracker
 
+First thing, integrate your app with firebase.
 The covid tracker app uses the device id, location, Great circle distance plugin and realtime database to do the following.
 1. Get the your current location
 2. Update your device current location to a real time database.
