@@ -1,6 +1,5 @@
 import 'package:covid_tracker/provider/authProvider.dart';
 import 'package:covid_tracker/utils/constants.dart';
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +15,7 @@ class AuthPage extends StatefulWidget {
 
 class _AuthPageState extends State<AuthPage> {
   bool isLoading = false;
+
   @override
   void initState() {
     super.initState();

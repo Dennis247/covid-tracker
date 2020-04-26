@@ -5,6 +5,7 @@ import 'provider/authProvider.dart';
 import 'provider/deviceProvider.dart';
 import 'ui/pages/homePage.dart';
 import 'ui/pages/onboardingPage.dart';
+import 'ui/pages/waitingPage.dart';
 import 'utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'ui/pages/authPage.dart';
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
                           authDataResultSnapSHot.connectionState ==
                                   ConnectionState.waiting
                               ? Center(
-                                  child: CircularProgressIndicator(),
+                                  child: WaitingPage(),
                                 )
                               : authData.hasOnboarded
                                   ? AuthPage()

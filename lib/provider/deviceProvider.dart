@@ -2,6 +2,7 @@ import 'package:background_location/background_location.dart';
 import 'package:covid_tracker/model/contactModel.dart';
 import 'package:covid_tracker/model/deviceModel.dart';
 import 'package:covid_tracker/provider/authProvider.dart';
+import 'package:covid_tracker/utils/constants.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:great_circle_distance2/great_circle_distance2.dart';
@@ -69,14 +70,14 @@ class DeviceProvider with ChangeNotifier {
           DateTime timeStamp = DateTime.now();
           //check if device has been in same location for the last 1 hour
           if (timeStamp.difference(contactDevice.locationTime) <=
-              Duration(hours: 1)) {
+              Duration(hours: Constants.contactDuration)) {
             //calculate distance between device
             final contactDistance = _caculateDeviceDistanceInMeters(
                 currentUserDevice.latitude,
                 currentUserDevice.longitude,
                 contactDevice.latitude,
                 contactDevice.longitude);
-            if (contactDistance <= 6) {
+            if (contactDistance <= Constants.contactDistance) {
               //create contact if device contact is less than or equal to 6 meters
               Contact contact = new Contact(
                   conatctDate: DateTime.now(),
@@ -111,7 +112,7 @@ class DeviceProvider with ChangeNotifier {
       'longitude': device.longitude,
       'deviceId': device.deviceId,
       'userId': device.userId,
-      'locationTime': device.locationTime
+      'locationTime': device.locationTime.toIso8601String()
     });
   }
 

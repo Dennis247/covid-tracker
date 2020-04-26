@@ -1,13 +1,14 @@
 import 'package:background_location/background_location.dart';
 import 'package:covid_tracker/model/userModel.dart';
 import 'package:covid_tracker/utils/constants.dart';
-import 'package:device_id/device_id.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+
+import 'package:uuid/uuid.dart';
 
 String deviceId;
 GoogleSignInAccount googleUser;
@@ -112,7 +113,8 @@ class AuthProvider with ChangeNotifier {
       // FirebaseUser firebaseUser =
       //     (await auth.signInWithCredential(credential)).user;
       // if (firebaseUser != null) {
-      deviceId = await DeviceId.getID;
+//device Id is throwing up error
+      deviceId = googleUser.id;
       loggedInUser = new User(
           id: googleUser.id,
           email: googleUser.email,

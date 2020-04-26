@@ -1,5 +1,6 @@
 import 'package:covid_tracker/model/contactModel.dart';
 import 'package:covid_tracker/provider/authProvider.dart';
+import 'package:covid_tracker/utils/constants.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
@@ -53,7 +54,7 @@ class ContactProvider with ChangeNotifier {
           //check if existing contact is more than 14 days
           if (DateTime.parse(value['conatctDate'].toString())
                   .difference(DateTime.now()) >=
-              Duration(days: 14)) {
+              Duration(days: Constants.isolationPeriod)) {
             contactReference
                 .reference()
                 .child(key.toString())
