@@ -50,20 +50,23 @@ class ContactProvider with ChangeNotifier {
           .once()
           .then((dataSnapshot) {
         Map<dynamic, dynamic> contactList = dataSnapshot.value;
-        contactList.forEach((key, value) {
-          //check if existing contact is more than 14 days
-          if (DateTime.parse(value['conatctDate'].toString())
-                  .difference(DateTime.now()) >=
-              Duration(days: Constants.isolationPeriod)) {
-            contactReference
-                .reference()
-                .child(key.toString())
-                .remove()
-                .then((_) {
-              print("contact removed sucessfully");
-            });
-          }
-        });
+
+        if (contactList != null) {
+          contactList.forEach((key, value) {
+            //check if existing contact is more than 14 days
+            if (DateTime.parse(value['conatctDate'].toString())
+                    .difference(DateTime.now()) >=
+                Duration(days: Constants.isolationPeriod)) {
+              contactReference
+                  .reference()
+                  .child(key.toString())
+                  .remove()
+                  .then((_) {
+                print("contact removed sucessfully");
+              });
+            }
+          });
+        }
       });
     } catch (e) {
       print(e.toString());

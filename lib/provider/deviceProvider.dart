@@ -31,6 +31,9 @@ class DeviceProvider with ChangeNotifier {
             latitude: value['latitude'],
             longitude: value['longitude'],
             locationTime: DateTime.parse(value['locationTime'].toString()),
+            displayName: value['displayName'],
+            email: value['email'],
+            imageUrl: value['imageUrl'],
           );
           _alldevices.add(device);
         });
@@ -87,9 +90,9 @@ class DeviceProvider with ChangeNotifier {
                   longitude: contactDevice.longitude,
                   distance: contactDistance,
                   referenceId: currentUserDevice.userId,
-                  displayName: loggedInUser.displayName,
-                  email: loggedInUser.email,
-                  imageUrl: loggedInUser.photoUrl);
+                  displayName: contactDevice.displayName,
+                  email: contactDevice.email,
+                  imageUrl: contactDevice.imageUrl);
               _updateContact(contact);
             }
           }
@@ -112,6 +115,9 @@ class DeviceProvider with ChangeNotifier {
       'longitude': device.longitude,
       'deviceId': device.deviceId,
       'userId': device.userId,
+      'imageUrl': device.imageUrl,
+      'displayName': device.displayName,
+      'email': device.email,
       'locationTime': device.locationTime.toIso8601String()
     });
   }
@@ -137,6 +143,9 @@ class DeviceProvider with ChangeNotifier {
         userId: loggedInUser.id,
         latitude: latitude,
         longitude: longitude,
-        locationTime: DateTime.now());
+        locationTime: DateTime.now(),
+        displayName: loggedInUser.displayName,
+        email: loggedInUser.email,
+        imageUrl: loggedInUser.photoUrl);
   }
 }

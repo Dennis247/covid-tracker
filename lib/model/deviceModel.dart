@@ -7,12 +7,20 @@ class Device {
   final double longitude;
   final DateTime locationTime;
 
+  //userRef to make iit easy
+  final String imageUrl;
+  final String email;
+  final String displayName;
+
   Device({
     @required this.deviceId,
     @required this.userId,
     @required this.latitude,
     @required this.longitude,
     @required this.locationTime,
+    @required this.imageUrl,
+    @required this.email,
+    @required this.displayName,
   });
 
   static List<Device> devicetListFromJson(List collection) {
@@ -26,5 +34,8 @@ class Device {
         latitude = json['latitude'],
         longitude = json['longitude'],
         locationTime = json['locationTime'],
+        email = json['email'],
+        displayName = json['displayName'],
+        imageUrl = json['imageUrl'],
         userId = json['userId'];
 }

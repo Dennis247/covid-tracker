@@ -28,57 +28,65 @@ class _AuthPageState extends State<AuthPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: MediaQuery.of(context).size.width * 0.2,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Image.asset("assets/images/4.png"),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.width * 0.1,
-            ),
-            SizedBox(
-              height: 48,
-              width: MediaQuery.of(context).size.width * 0.7,
-              child: MaterialButton(
-                onPressed: () async {
-                  await Provider.of<AuthProvider>(context, listen: false)
-                      .handleSignIn();
-                  Navigator.of(context)
-                      .pushReplacementNamed(HomePage.routeName);
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(
-                      FontAwesomeIcons.google,
-                      color: Colors.red,
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    isLoading
-                        ? Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        : Text(
-                            "Sign In With Google",
-                            style: AppStyle.mediumTextSTyleWhite,
-                          )
-                  ],
-                ),
-                color: Constants.primaryColor,
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: MediaQuery.of(context).size.width * 0.2,
               ),
-            )
-          ],
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Image.asset("assets/images/4.png"),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.width * 0.1,
+              ),
+              SizedBox(
+                height: 48,
+                width: MediaQuery.of(context).size.width * 0.7,
+                child: MaterialButton(
+                  onPressed: () async {
+                    setState(() {
+                      isLoading = true;
+                    });
+                    await Provider.of<AuthProvider>(context, listen: false)
+                        .handleSignIn();
+                    setState(() {
+                      isLoading = false;
+                    });
+                    Navigator.of(context)
+                        .pushReplacementNamed(HomePage.routeName);
+                  },
+                  child: isLoading
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(
+                              FontAwesomeIcons.google,
+                              color: Colors.red,
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              "Sign In With Google",
+                              style: AppStyle.mediumTextSTyleWhite,
+                            )
+                          ],
+                        ),
+                  color: Constants.primaryColor,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

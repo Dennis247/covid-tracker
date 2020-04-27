@@ -75,9 +75,13 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
   List<Container> _getonBoardingList() {
     return [
-      _buildOnboardingPages("assets/images/1.png", "Sign Up", 1, false),
-      _buildOnboardingPages("assets/images/2.png",
-          "Records Contacts less than 6 meters", 2, false),
+      _buildOnboardingPages(
+          "assets/images/1.png", "Sign Up and Turn On Location", 1, false),
+      _buildOnboardingPages(
+          "assets/images/2.png",
+          "Records Contacts less than ${Constants.contactDistance} meters",
+          2,
+          false),
       _buildOnboardingPages("assets/images/3.png", "Track Contacts", 3, true)
     ];
   }
