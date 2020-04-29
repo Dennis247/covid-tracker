@@ -13,7 +13,6 @@ import 'package:covid_tracker/utils/styles.dart';
 
 class HomePage extends StatefulWidget {
   static final routeName = "home-page";
-  bool _isLoading = false;
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -36,7 +35,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-          child: Scaffold(
+      child: Scaffold(
         appBar: AppBar(
           title: Text(
             "Recent Contacts",
