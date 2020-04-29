@@ -9,4 +9,6 @@ First thing, integrate your app with firebase.The covid tracker app uses the dev
 
 Always make sure your location is turned on, to keep tracking contacts
 
+![alt text](https://github.com/Dennis247/covid-tracker/blob/master/lib/ss/screenshot.jpg)
+
 
