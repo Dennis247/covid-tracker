@@ -10,7 +10,8 @@ First thing, integrate your app with firebase.The covid tracker app uses the dev
 6. These contacts are stored for tracing purposes. 
 7. After 14 days(required qurantine period) of making contact, the contacts are auto deleted.
 
-!Always make sure your location is turned on for realtime  tracking of contacts.
+! All these happens when the app is up or in the background.
+!Always make sure your location is turned on for realtime tracking of contacts.
 
 ![alt text](https://github.com/Dennis247/covid-tracker/blob/master/lib/ss/screenshot.jpg)
 
